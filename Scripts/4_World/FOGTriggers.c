@@ -21,15 +21,12 @@ class FOGTriggers
 	
 	void FOGTriggers()
         {
-
 		GetRPCManager().AddRPC( "FOGTriggers", "StopTrigger", this, SingleplayerExecutionType.Client );
-		GetRPCManager().AddRPC( "FOGTriggers", "FOGMessage", this, SingleplayerExecutionType.Client );
+		//GetRPCManager().AddRPC( "FOGTriggers", "FOGMessage", this, SingleplayerExecutionType.Client );
 		FOG_MYTrigger trigger;
 		vector mins, maxs;
 		vector WhereIsIt = "10810 4 2266";
 		float radius = 5.8;
-
-			
 
 			trigger = FOG_MYTrigger.Cast(GetGame().CreateObject("FOG_MYTrigger", WhereIsIt));
 
@@ -43,15 +40,17 @@ class FOGTriggers
 		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");		
        }
 
-
-
 	
 	void StopTrigger( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
 	{
-
-
 	}
 
+	static void FogSteppedIntoArea(Object obj)
+	{
+                PlayerBase player = PlayerBase.Cast(obj);
+		Param1<string> msgRp0 = new Param1<string>( "Ok So you're here" );
+		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
+	}
 
 
 

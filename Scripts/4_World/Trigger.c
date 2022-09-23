@@ -28,6 +28,7 @@ class FOG_MYTrigger extends Trigger
 		m_fogtriggerSound = SEffectManager.PlaySoundOnObject( "ZmbM_Normal2_FOG_001_SoundSet", this );
 		m_fogtriggerSound.Event_OnSoundWaveEnded.Insert(StopMyTriggeredEvent);
 		m_fogtriggerSound.SetSoundAutodestroy(true);
+		string msg = "hello";
 	}
 	
 	void TriggerOnEnterEvent(int index)
@@ -42,24 +43,28 @@ class FOG_MYTrigger extends Trigger
 		SetSynchDirty();
 	}
 	
-
-		
-
 		
 	void OnEnter(Object obj)
     {
 	vector WhereIsIt = "10810 4 2266";
-            PlayerBase player = PlayerBase.Cast(GetGame().GetPlayer());
-
-
 		if (vector.Distance(this.GetPosition(), WhereIsIt) <= 20.0)
 		{
 		TriggerOnEnterEvent(1);    // -------------------
 		GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );
+		FOGTriggers.FogSteppedIntoArea(obj);
 		}					
     }
 
     void OnLeave(Object obj)
     {    
     }
+
+
+
+
+
+
+
+
+
 };
