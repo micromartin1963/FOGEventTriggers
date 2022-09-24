@@ -1,11 +1,16 @@
+
+
+
 class FOGInfo
 {
     string name;
+    string OrigVectorStr;
 
 
-    void FOGInfo(string nam) 
+    void FOGInfo(string nam,string v) 
 	{
         name = nam;
+	OrigVectorStr = v;
 	}
 }
 
@@ -32,9 +37,15 @@ class FOGTriggerConfig
         if (!FileExist(configPath))
         {
 	// --------------------------------------------------put an error message up and log todo
+	Print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX not found FODERROR");
         }
+	else
+	{
+	Print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX found FODNOERROR");
+	}
 
         JsonFileLoader<FOG__Info>.JsonLoadFile(configPath, configData);
+
     }
 
 
