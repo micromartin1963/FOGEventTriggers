@@ -20,7 +20,7 @@ class FOGTriggers
 	
 	void FOGTriggers()
         {
-		GetRPCManager().AddRPC( "FOGTriggers", "StopTrigger", this, SingleplayerExecutionType.Client );
+		GetRPCManager().AddRPC( "FOGTriggers", "StopTrigger", this, SingleplayerExecutionType.Client );   // Don't know yet !!!!!!!!!!
 		FOG__Info config = GetDayZGame().GetFTRConfig(); 
 		FOG_MYTrigger trigger;
 		vector mins, maxs;
@@ -35,8 +35,8 @@ class FOGTriggers
 			} else {
 				trigger.SetCollisionCylinder(radius, 5.8);   // check this ???????
 			}  
-			trigger.SetTriggerText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-  
+			trigger.SetTriggerText(config.FOGLocs.Get(1).name);
+  			trigger.SetTriggerOrigVector(config.FOGLocs.Get(1).OrigVectorStr);
 
 		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");	// this is just a visual marker temp	
        }
@@ -45,10 +45,28 @@ class FOGTriggers
 	{
 	}
 
-	static void FogSteppedIntoArea(Object obj, string str)
+	static void FogSteppedIntoArea(Object obj, string str,string positionOrig)
 	{
+		vector where;
+		where = positionOrig.ToVector();
                 PlayerBase player = PlayerBase.Cast(obj);
 		Param1<string> msgRp0 = new Param1<string>( str );
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
+
+		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", where);
 	}
+
+	void FOGChat(string message)
+	{
+		ref array<Man> players = new array<Man>;
+		GetGame().GetPlayers( players );
+		foreach( auto player : players  )
+		{
+			Param1<string> m_MessageParam = new Param1<string>(message);
+			GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, m_MessageParam, true, player.GetIdentity());
+		}
+	}
+
+
+
 }
