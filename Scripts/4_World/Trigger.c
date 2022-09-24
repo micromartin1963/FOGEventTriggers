@@ -12,8 +12,7 @@ class FOG_MYTrigger extends Trigger
 	{
 		GetRPCManager().SendRPC( "FOGTriggers", "StopTrigger", new Param1< vector >( this.GetPosition() ) );
 	}
-	
-	
+		
 	override void OnVariablesSynchronized()
 	{
 		super.OnVariablesSynchronized();
@@ -28,7 +27,6 @@ class FOG_MYTrigger extends Trigger
 		m_fogtriggerSound = SEffectManager.PlaySoundOnObject( "ZmbM_Normal2_FOG_001_SoundSet", this );
 		m_fogtriggerSound.Event_OnSoundWaveEnded.Insert(StopMyTriggeredEvent);
 		m_fogtriggerSound.SetSoundAutodestroy(true);
-		string msg = "hello";
 	}
 	
 	void TriggerOnEnterEvent(int index)
@@ -46,12 +44,12 @@ class FOG_MYTrigger extends Trigger
 		
 	void OnEnter(Object obj)
     {
-	vector WhereIsIt = "10810 4 2266";
-		if (vector.Distance(this.GetPosition(), WhereIsIt) <= 20.0)
+	vector WhereIsIt = "10810 4 2266";                                     // just one fixed test position till bring fileread in
+		if (vector.Distance(this.GetPosition(), WhereIsIt) <= 20.0)	// will bring in variable for radius
 		{
-		TriggerOnEnterEvent(1);    // -------------------
-		GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );
-		FOGTriggers.FogSteppedIntoArea(obj);
+		TriggerOnEnterEvent(1);    // -calls this action to call DoMyTriggeredEvent but this has parameter limitations. so call FOGTriggers.FogSteppedIntoArea(obj) aswell !???!!!
+		GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );         // needed to reset
+		FOGTriggers.FogSteppedIntoArea(obj);   //------------------------- calls this action aswell !!! needed to use playerbase ?!? (more parameters to be pushed)
 		}					
     }
 

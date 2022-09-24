@@ -17,16 +17,14 @@ class FOGTriggers
 	{
 		Instance = null;
 	}
-
 	
 	void FOGTriggers()
         {
 		GetRPCManager().AddRPC( "FOGTriggers", "StopTrigger", this, SingleplayerExecutionType.Client );
-		//GetRPCManager().AddRPC( "FOGTriggers", "FOGMessage", this, SingleplayerExecutionType.Client );
 		FOG_MYTrigger trigger;
 		vector mins, maxs;
-		vector WhereIsIt = "10810 4 2266";
-		float radius = 5.8;
+		vector WhereIsIt = "10810 4 2266";   // temp fixed position
+		float radius = 5.8;                  // bring in from file
 
 			trigger = FOG_MYTrigger.Cast(GetGame().CreateObject("FOG_MYTrigger", WhereIsIt));
 
@@ -34,12 +32,11 @@ class FOGTriggers
 			{
 				trigger.SetExtents(mins, maxs);
 			} else {
-				trigger.SetCollisionCylinder(radius, 5.8);
+				trigger.SetCollisionCylinder(radius, 5.8);   // check this ???????
 			}    
 
-		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");		
+		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");	// this is just a visual marker temp	
        }
-
 	
 	void StopTrigger( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )
 	{
@@ -51,8 +48,4 @@ class FOGTriggers
 		Param1<string> msgRp0 = new Param1<string>( "Ok So you're here" );
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
 	}
-
-
-
-
 }
