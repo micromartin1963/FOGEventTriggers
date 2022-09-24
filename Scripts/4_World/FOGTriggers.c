@@ -37,6 +37,7 @@ class FOGTriggers
 			}  
 			trigger.SetTriggerText(config.FOGLocs.Get(1).name);
   			trigger.SetTriggerOrigVector(config.FOGLocs.Get(1).OrigVectorStr);
+			trigger.SetLastTriggeredTime((GetGame().GetTime()/1000) );
 
 		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");	// this is just a visual marker temp	
        }

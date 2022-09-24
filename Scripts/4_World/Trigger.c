@@ -4,6 +4,9 @@ class FOG_MYTrigger extends Trigger
 	protected ref EffectSound m_fogtriggerSound;
 	protected string m_TriggerText;
 	protected string m_TriggerOrigVector;
+
+	protected int m_LastTriggered; //----------------------------------------------------------
+	protected int m_LastTriggeredTime;
 	
 	void FOG_MYTrigger()
 	{
@@ -64,6 +67,25 @@ class FOG_MYTrigger extends Trigger
 	{
 		m_TriggerText = text;
 	}
+
+
+	void SetLastTriggeredTime(int time)
+	{
+		m_LastTriggeredTime = time;
+	}
+
+
+	bool CanWeTrigger(int time)   //------------- 60 needs to be a variable
+	{
+		if (time > m_LastTriggeredTime+60)
+		{
+			m_LastTriggered = time;
+			return true;
+		}			
+		return false;
+	}
+
+
 		
 	void OnEnter(Object obj)
     {
@@ -71,11 +93,23 @@ class FOG_MYTrigger extends Trigger
 	string str = GetTriggerText();
 	vector WhereIsIt = "10810 4 2266";                                     // just one fixed test position till bring fileread in
 	string str2 = "10825 4 2278";
-		if (vector.Distance(this.GetPosition(), WhereIsIt) <= 20.0)	// will bring in variable for radius
+
+		if (obj.IsMan() && GetGame().IsServer())
 		{
-		TriggerOnEnterEvent(1);    // -calls this action to call DoMyTriggeredEvent but this has parameter limitations. so call FOGTriggers.FogSteppedIntoArea(obj) aswell !???!!!
-		GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );         // needed to reset
-		FOGTriggers.FogSteppedIntoArea(obj,str,str2);   //calls this action aswell !!! needed to use playerbase ?!? (more parameters to be pushed)
+
+
+			if (CanWeTrigger(GetGame().GetTime()/1000))
+			{
+
+
+				if (vector.Distance(this.GetPosition(), WhereIsIt) <= 5.0)	// will bring in variable for radius
+				{
+				SetLastTriggeredTime(GetGame().GetTime()/1000);
+				TriggerOnEnterEvent(1);    // -calls this action to call DoMyTriggeredEvent but this has parameter limitations. so call FOGTriggers.FogSteppedIntoArea(obj) aswell !???!!!
+				GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );         // needed to reset
+				FOGTriggers.FogSteppedIntoArea(obj,str,str2);   //calls this action aswell !!! needed to use playerbase ?!? (more parameters to be pushed)
+				}
+			}
 		}					
     }
 
