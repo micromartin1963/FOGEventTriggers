@@ -21,6 +21,7 @@ class FOGTriggers
 	void FOGTriggers()
         {
 		GetRPCManager().AddRPC( "FOGTriggers", "StopTrigger", this, SingleplayerExecutionType.Client );
+		FOG__Info config = GetDayZGame().GetFTRConfig(); 
 		FOG_MYTrigger trigger;
 		vector mins, maxs;
 		vector WhereIsIt = "10810 4 2266";   // temp fixed position
@@ -33,7 +34,9 @@ class FOGTriggers
 				trigger.SetExtents(mins, maxs);
 			} else {
 				trigger.SetCollisionCylinder(radius, 5.8);   // check this ???????
-			}    
+			}  
+			trigger.SetTriggerText("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+  
 
 		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");	// this is just a visual marker temp	
        }
@@ -42,10 +45,10 @@ class FOGTriggers
 	{
 	}
 
-	static void FogSteppedIntoArea(Object obj)
+	static void FogSteppedIntoArea(Object obj, string str)
 	{
                 PlayerBase player = PlayerBase.Cast(obj);
-		Param1<string> msgRp0 = new Param1<string>( "Ok So you're here" );
+		Param1<string> msgRp0 = new Param1<string>( str );
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
 	}
 }
