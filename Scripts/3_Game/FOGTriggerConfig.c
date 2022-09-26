@@ -3,14 +3,20 @@
 
 class FOGInfo
 {
+    int TType;
     string name;
     string OrigVectorStr;
+    string TargetVectorStr;
+
+ 
 
 
-    void FOGInfo(string nam,string v) 
+    void FOGInfo(int Type,string nam,string v,string v2) 
 	{
+	TType = Type;
         name = nam;
 	OrigVectorStr = v;
+	TargetVectorStr = v2;
 	}
 }
 
@@ -34,7 +40,7 @@ class FOGTriggerConfig
     {
         string configPath = m_CfgRoot + cfgName;
 
-        if (!FileExist(configPath))
+        if (!FileExist(configPath))    //------------------------------------ we need a logger to do this properly
         {
 	// --------------------------------------------------put an error message up and log todo
 	Print("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX not found FODERROR");
