@@ -89,7 +89,7 @@ class CfgSoundShaders
 class CfgSoundSets
 {
 	//class baseCharacter_SoundSet;
-	class ZmbM_Normal2_FOG_001_SoundSet
+	class FOG_SoundSet_001
 	{
 		soundShaders[] = {"FOG_SoundShader1"};
 	};
