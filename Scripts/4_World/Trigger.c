@@ -1,16 +1,18 @@
 class FOG_MYTrigger extends Trigger
 {
 	protected int m_fogtrigger;
-	protected ref EffectSound m_fogtriggerSound;
+	protected  EffectSound m_fogtriggerSound;
 	protected string m_TriggerText;
 	protected string m_TriggerOrigVector;
-
+	protected string m_TriggerSnd;
+        protected int m_type;
 	protected int m_LastTriggered; //----------------------------------------------------------
 	protected int m_LastTriggeredTime;
+	protected string m_TriggerTargetVector;
 	
 	void FOG_MYTrigger()
 	{
-		RegisterNetSyncVariableInt("m_fogtrigger");	
+		RegisterNetSyncVariableInt("m_fogtrigger");
 	}
 	
 	void StopMyTriggeredEvent()
@@ -23,15 +25,15 @@ class FOG_MYTrigger extends Trigger
 		super.OnVariablesSynchronized();
 		if (m_fogtrigger>0)
 		{
-			DoMyTriggeredEvent(m_fogtrigger);
+		string sndstr  = "FOG_SoundSet_001";  // COMPOSE SOUNDSET FROME NAME AND INDEX > sndstr
+		DoMyTriggeredEvent(m_fogtrigger,sndstr);
+
 		}
         }
 	
-	void DoMyTriggeredEvent(int index)
+	void DoMyTriggeredEvent(int index,string sndstr)
 	{
-		m_fogtriggerSound = SEffectManager.PlaySoundOnObject( "ZmbM_Normal2_FOG_001_SoundSet", this );
-		m_fogtriggerSound.Event_OnSoundWaveEnded.Insert(StopMyTriggeredEvent);
-		m_fogtriggerSound.SetSoundAutodestroy(true);
+		PlaySoundSet(m_fogtriggerSound, sndstr, 0.1, 0.1);  
 	}
 	
 	void TriggerOnEnterEvent(int index)
@@ -46,6 +48,25 @@ class FOG_MYTrigger extends Trigger
 		SetSynchDirty();
 	}
 	
+	void SetTriggerType(int t)
+	{
+		m_type = t;
+	}
+	
+	int GetTriggerType()
+	{
+		return m_type;
+	}
+
+	string GetTargetVectorStr()
+	{
+	return m_TriggerTargetVector;
+	}
+
+	void SetTargetVectorStr(string v)
+	{
+	m_TriggerTargetVector = v;
+	}
 
 	string GetTriggerOrigVector()
 	{
@@ -57,7 +78,6 @@ class FOG_MYTrigger extends Trigger
 	m_TriggerOrigVector = v;
 	}
 
-
 	string GetTriggerText()
 	{
 		return m_TriggerText;
@@ -68,6 +88,15 @@ class FOG_MYTrigger extends Trigger
 		m_TriggerText = text;
 	}
 
+	string GetTriggerSnd()
+	{
+		return m_TriggerSnd;
+	}
+
+	void SetTriggerSnd(string text)
+	{
+		m_TriggerSnd = text;
+	}
 
 	void SetLastTriggeredTime(int time)
 	{
@@ -84,31 +113,21 @@ class FOG_MYTrigger extends Trigger
 		}			
 		return false;
 	}
-
-
 		
 	void OnEnter(Object obj)
     {
 
-	string str = GetTriggerText();
-	vector WhereIsIt = "10810 4 2266";                                     // just one fixed test position till bring fileread in
-	string str2 = "10825 4 2278";
-
+	string txtstr = GetTriggerText();
+	string vectorstr1 = GetTargetVectorStr();
+					
 		if (obj.IsMan() && GetGame().IsServer())
 		{
-
-
 			if (CanWeTrigger(GetGame().GetTime()/1000))
 			{
-
-
-				if (vector.Distance(this.GetPosition(), WhereIsIt) <= 5.0)	// will bring in variable for radius
-				{
-				SetLastTriggeredTime(GetGame().GetTime()/1000);
-				TriggerOnEnterEvent(1);    // -calls this action to call DoMyTriggeredEvent but this has parameter limitations. so call FOGTriggers.FogSteppedIntoArea(obj) aswell !???!!!
-				GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );         // needed to reset
-				FOGTriggers.FogSteppedIntoArea(obj,str,str2);   //calls this action aswell !!! needed to use playerbase ?!? (more parameters to be pushed)
-				}
+			SetLastTriggeredTime(GetGame().GetTime()/1000);
+			TriggerOnEnterEvent(1);    // -calls this action to call DoMyTriggeredEvent but this has parameter limitations. so call FogSteppedIntoArea(obj) aswell !???!!!
+			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );         // needed to reset
+			FOGTriggers.FogSteppedIntoArea2(obj,txtstr,vectorstr1);   //calls this action aswell !!! needed to use playerbase ?!? (more parameters to be pushed)
 			}
 		}					
     }
@@ -116,13 +135,5 @@ class FOG_MYTrigger extends Trigger
     void OnLeave(Object obj)
     {    
     }
-
-
-
-
-
-
-
-
 
 };
