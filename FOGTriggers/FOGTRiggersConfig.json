@@ -2,17 +2,34 @@
 
     "FOGLocs": [
         {
-	"TType": 1,
-         "name": "OMG HAS IT WORKED !",
+	"LocationName" : "Beach location 1",
+	"TType": 2,
+        "FogText": "FOG_SoundSet_002",
 	"OrigVectorStr":	"10810 4 2266",
-	"TargetVectorStr": "10825 4 2278"
-            
+	"TargetVectorStr": "10825 4 2278",
+        "FogRadius" : "6.2",
+        "FogClassnameStr" : "ZmbF_BlueCollarFat_Blue",
+	"FogSoundIndex" : 2
+        }, 
+       {
+	"LocationName" : "Beach location 2",
+	"TType": 3,
+        "FogText": "FOG_SoundSet_001",
+	"OrigVectorStr":	"10820 5 2292",
+	"TargetVectorStr": "10829 6 2336",
+        "FogRadius" : "6.2",
+        "FogClassnameStr" : "ZmbF_BlueCollarFat_Blue",
+	"FogSoundIndex" : 1
         },
         {
-	"TType": 1,
-         "name": "OMG HAS IT WORKED2 !",
-	"OrigVectorStr":	"10810 4 2266",
-	"TargetVectorStr": "10825 4 2278"      
+	"LocationName" : "Beach location 3",
+	"TType": 4,
+        "FogText": "Beach location 3",
+	"OrigVectorStr":	"10851 3 2374",
+	"TargetVectorStr": "10856 3 2398",
+        "FogRadius" : "5.2",
+        "FogClassnameStr" : "ZmbF_BlueCollarFat_Blue",
+	"FogSoundIndex" : 2     
         }
     ]
 }
