@@ -81,6 +81,13 @@ class CfgSoundShaders
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
 	};
+	class FOG_SoundShader2: baseCharacter_SoundShader
+	{
+		samples[] = {{"FOG\FOGTriggers\sounds\attack_111",1}};
+		volume = 1;
+		range = 60;
+		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
+	};
 
 };
 
@@ -89,9 +96,13 @@ class CfgSoundShaders
 class CfgSoundSets
 {
 	//class baseCharacter_SoundSet;
-	class FOG_SoundSet_001
+	class FOG_SoundSet_1
 	{
 		soundShaders[] = {"FOG_SoundShader1"};
+	};
+	class FOG_SoundSet_2
+	{
+		soundShaders[] = {"FOG_SoundShader2"};
 	};
 };
 
