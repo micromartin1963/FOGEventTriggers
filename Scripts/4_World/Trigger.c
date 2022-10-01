@@ -1,3 +1,5 @@
+// 1 teleport , 2 spawn item , 3 sound only
+
 class FOG_MYTrigger extends Trigger
 {
 	protected int m_fogtrigger;
@@ -6,6 +8,8 @@ class FOG_MYTrigger extends Trigger
 	protected string m_TriggerOrigVector;
 	protected string m_TriggerSnd;
         protected int m_type;
+        protected int m_soundindex;
+	protected string m_FogClassname;
 	protected int m_LastTriggered; //----------------------------------------------------------
 	protected int m_LastTriggeredTime;
 	protected string m_TriggerTargetVector;
@@ -14,28 +18,22 @@ class FOG_MYTrigger extends Trigger
 	{
 		RegisterNetSyncVariableInt("m_fogtrigger");
 	}
-	
-	void StopMyTriggeredEvent()
-	{
-		GetRPCManager().SendRPC( "FOGTriggers", "StopTrigger", new Param1< vector >( this.GetPosition() ) );
-	}
-		
+			
 	override void OnVariablesSynchronized()
 	{
 		super.OnVariablesSynchronized();
 		if (m_fogtrigger>0)
 		{
-		string sndstr  = "FOG_SoundSet_001";  // COMPOSE SOUNDSET FROME NAME AND INDEX > sndstr
-		DoMyTriggeredEvent(m_fogtrigger,sndstr);
-
+		DoStuff("FOG_SoundSet_" + m_fogtrigger.ToString());
 		}
         }
 	
-	void DoMyTriggeredEvent(int index,string sndstr)
+
+	void DoStuff(string sndstr)
 	{
-		PlaySoundSet(m_fogtriggerSound, sndstr, 0.1, 0.1);  
+	FOGTriggers.FogSteppedIntoAreaFromSync(sndstr);
 	}
-	
+
 	void TriggerOnEnterEvent(int index)
 	{
 		m_fogtrigger = index;
@@ -47,7 +45,27 @@ class FOG_MYTrigger extends Trigger
 		m_fogtrigger = 0;
 		SetSynchDirty();
 	}
+
+	void SetFogClassname(string Cn)
+	{
+		m_FogClassname = Cn;
+	}
 	
+	string GetFogClassname()
+	{
+		return m_FogClassname;
+	}
+	
+	void SetFogSoundIndex(int i)
+	{
+		m_soundindex = i;
+	}
+	
+	int GetFogSoundIndex()
+	{
+		return m_soundindex;
+	}
+
 	void SetTriggerType(int t)
 	{
 		m_type = t;
@@ -78,7 +96,7 @@ class FOG_MYTrigger extends Trigger
 	m_TriggerOrigVector = v;
 	}
 
-	string GetTriggerText()
+	 string GetTriggerText()
 	{
 		return m_TriggerText;
 	}
@@ -104,7 +122,7 @@ class FOG_MYTrigger extends Trigger
 	}
 
 
-	bool CanWeTrigger(int time)   //------------- 60 needs to be a variable
+	bool CanWeTrigger(int time)   //------------- 60 needs to be a variable possibly not less that 60
 	{
 		if (time > m_LastTriggeredTime+60)
 		{
@@ -116,18 +134,21 @@ class FOG_MYTrigger extends Trigger
 		
 	void OnEnter(Object obj)
     {
-
-	string txtstr = GetTriggerText();
-	string vectorstr1 = GetTargetVectorStr();
-					
+				
 		if (obj.IsMan() && GetGame().IsServer())
 		{
 			if (CanWeTrigger(GetGame().GetTime()/1000))
 			{
+       			PlayerBase player = PlayerBase.Cast(obj);	
+			string vectorstr1 = GetTargetVectorStr();
+			string FClassname = GetFogClassname();
+			string txtstr =  GetTriggerText();
+			int TriggerType = GetTriggerType();
+			int sndIndex = GetFogSoundIndex();		
 			SetLastTriggeredTime(GetGame().GetTime()/1000);
-			TriggerOnEnterEvent(1);    // -calls this action to call DoMyTriggeredEvent but this has parameter limitations. so call FogSteppedIntoArea(obj) aswell !???!!!
-			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );         // needed to reset
-			FOGTriggers.FogSteppedIntoArea2(obj,txtstr,vectorstr1);   //calls this action aswell !!! needed to use playerbase ?!? (more parameters to be pushed)
+			TriggerOnEnterEvent(sndIndex);  
+			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );      
+			FOGTriggers.FogSteppedIntoArea(obj,txtstr,vectorstr1,FClassname,TriggerType);  
 			}
 		}					
     }

@@ -3,20 +3,27 @@
 
 class FOGInfo
 {
+    string LocationName;
     int TType;
-    string name;
+    string FogText;
     string OrigVectorStr;
     string TargetVectorStr;
-
+    string FogRadius;
+    string FogClassnameStr;
+    int FogSoundIndex;
  
 
 
-    void FOGInfo(int Type,string nam,string v,string v2) 
+    void FOGInfo(string loc,int Type,string nam,string v,string v2,string rad,string cn,int index) 
 	{
+	LocationName = loc;
 	TType = Type;
-        name = nam;
+        FogText = nam;
 	OrigVectorStr = v;
 	TargetVectorStr = v2;
+	FogRadius = rad;
+	FogClassnameStr = cn;
+	FogSoundIndex = index;
 	}
 }
 

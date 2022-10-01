@@ -1,7 +1,7 @@
 class FOGTriggers
 {
 	protected static ref FOGTriggers Instance;
-	
+
 	static FOGTriggers GetInstance()
 	{
 		if (!Instance)
@@ -18,48 +18,95 @@ class FOGTriggers
 	
 	void FOGTriggers()
         {
-		GetRPCManager().AddRPC( "FOGTriggers", "StopTrigger", this, SingleplayerExecutionType.Client );   // Don't know yet !!!!!!!!!!
-		FOG__Info config = GetDayZGame().GetFTRConfig(); 
-		FOG_MYTrigger trigger;
-		vector mins, maxs;
+	FOG__Info config = GetDayZGame().GetFTRConfig(); 
+	FOG_MYTrigger trigger;
+	  for ( int i=0; i < config.FOGLocs.Count(); i++)
+	  {
+		vector WhereIsIt = config.FOGLocs.Get(i).OrigVectorStr.ToVector();
 
-		vector WhereIsIt = config.FOGLocs.Get(1).OrigVectorStr.ToVector();
-
-		float radius = 5.8;                  // bring in from file
+		float radius =  config.FOGLocs.Get(i).FogRadius.ToFloat();              
 
 			trigger = FOG_MYTrigger.Cast(GetGame().CreateObject("FOG_MYTrigger", WhereIsIt));
 
 			if (radius == 0)
 			{
-				trigger.SetExtents(mins, maxs);
-			} else {
-				trigger.SetCollisionCylinder(radius, 5.8);   // check this ???????
+			trigger.SetCollisionCylinder(10, 5.9);   // Just set a default 
+			}
+			else
+			{
+			trigger.SetCollisionCylinder(radius, 5.9);
 			}  
-			trigger.SetTriggerType(config.FOGLocs.Get(1).TType);
-			trigger.SetTriggerText(config.FOGLocs.Get(1).name);
-  			trigger.SetTriggerOrigVector(config.FOGLocs.Get(1).OrigVectorStr);
-			trigger.SetTargetVectorStr(config.FOGLocs.Get(1).TargetVectorStr);
+			trigger.SetTriggerType(config.FOGLocs.Get(i).TType);
+			trigger.SetTriggerText(config.FOGLocs.Get(i).FogText);
+  			trigger.SetTriggerOrigVector(config.FOGLocs.Get(i).OrigVectorStr);
+			trigger.SetTargetVectorStr(config.FOGLocs.Get(i).TargetVectorStr);
+			trigger.SetFogSoundIndex(config.FOGLocs.Get(i).FogSoundIndex);
+			trigger.SetFogClassname(config.FOGLocs.Get(i).FogClassnameStr);
 			trigger.SetLastTriggeredTime((GetGame().GetTime()/1000) );
-
-		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", "10810 4 2266");	// this is just a visual marker temp	
+	    GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", WhereIsIt );   // temp visual  marker ------------------------------
+	  }
        }
 	
-	//void StopTrigger( CallType type, ref ParamsReadContext ctx, ref PlayerIdentity sender, ref Object target )  // ????????????????????????????
-	//{
-	//}
-
-	static void FogSteppedIntoArea2(Object obj, string str,string positionOrig)
+	static void FogSteppedIntoArea(Object obj, string textstr,string targetvectorstr,string classnamestr,int TriggerType)
 	{
-		//----TO DO CHECK TYPE AND  DOCASE RESULTS --------------------------------------------------------
-		vector where;
-		where = positionOrig.ToVector();
+		//type 2 - teleport , 3 - spawn object , 4 -  message , 5 - teleport + message , 6 - spawn + message
+	
                 PlayerBase player = PlayerBase.Cast(obj);
+		Param1<string> msgRp0 = new Param1<string>( textstr );
 
-		Param1<string> msgRp0 = new Param1<string>( str );
+		if(TriggerType==2)
+		{
+		player.SetPosition(targetvectorstr.ToVector());	
+		}
+		if(TriggerType==3)
+		{
+		GetGame().CreateObject(classnamestr, targetvectorstr.ToVector() );
+		}
+
+		if(TriggerType==4)
+		{
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
+		}
 
-		GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", where);
+		if(TriggerType==5)
+		{
+		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
+		player.SetPosition(targetvectorstr.ToVector());	
+		}
 
+		if(TriggerType==6)
+		{
+		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
+		GetGame().CreateObject(classnamestr, targetvectorstr.ToVector() );
+		}
+
+		if(TriggerType==7)
+		{
+
+		}
+
+	
+
+
+
+
+
+	
 	}
 
+	static void FogSteppedIntoAreaFromSync(string textstr)  
+	{
+	string snd = "" + textstr;
+	PlayerBase player = GetGame().GetPlayer();
+		if(player)
+		{
+		vector where = player.GetPosition();
+		EffectSound m_fogtriggerSound2 = new EffectSound;
+		m_fogtriggerSound2 = SEffectManager.PlaySound( snd, where );
+		}
+		else
+		{
+		Print("Error in FogSteppedIntoAreaFromSync");
+		}
+	}
 }
