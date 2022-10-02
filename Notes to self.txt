@@ -1,0 +1,20 @@
+If you add an item in trigger:
+Update the game file default file aswell
+
+TODO's
+Add cooldownperiod
+Add loads of sounds
+
+
+work out probably from first digit of soundset number:
+PlaySound on person
+PlaySound at location
+PlaySound at Target
+
+suggest looking at string for:
+Soundset_9xx   look for 9 for play on person
+Soundset_8xx   look for 8 for play at target
+everyother num is play at trigger point
+
+
+
