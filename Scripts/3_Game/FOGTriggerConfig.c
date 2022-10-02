@@ -1,6 +1,3 @@
-
-
-
 class FOGInfo
 {
     string LocationName;
@@ -8,25 +5,26 @@ class FOGInfo
     string FogText;
     string OrigVectorStr;
     string TargetVectorStr;
+    string TargetRot;
     string FogRadius;
     string FogClassnameStr;
     int FogSoundIndex;
+    int StandDownTime;
  
-
-
-    void FOGInfo(string loc,int Type,string nam,string v,string v2,string rad,string cn,int index) 
+    void FOGInfo(string loc,int Type,string nam,string v,string v2,string rot,string rad,string cn,int index,int s) 
 	{
 	LocationName = loc;
 	TType = Type;
         FogText = nam;
 	OrigVectorStr = v;
 	TargetVectorStr = v2;
+	TargetRot = rot;
 	FogRadius = rad;
 	FogClassnameStr = cn;
 	FogSoundIndex = index;
+	StandDownTime = s;
 	}
 }
-
 
 class FOG__Info
 {
@@ -37,19 +35,16 @@ class FOG__Info
 	}
 }
 
-
 class FOGTriggerConfig
 {
-
 	protected const static string m_CfgRoot = "$profile:\\FOGTriggers\\";
 
 	static void LoadConfig(string cfgName, out FOG__Info cfgDataSet)
 	{
         string configPath = m_CfgRoot + cfgName;
 
-    	    if (!FileExist(configPath))    //------------------------------------ we need a logger to do this properly
+    	    if (!FileExist(configPath))   
         	{
-		// --------------------------------------------------put an error message up and log todo
 		Print("XXXXXXXXXXXXXX not found Config ERROR default created in --> "+ configPath);
 		MyConfig(cfgDataSet);
 		SaveCfg(cfgName,cfgDataSet);
@@ -62,26 +57,21 @@ class FOGTriggerConfig
         JsonFileLoader<FOG__Info>.JsonLoadFile(configPath, cfgDataSet);
 	}
 
-
 	protected static void MyConfig(out FOG__Info cfgDataSet)
 	{
         cfgDataSet = new FOG__Info();
-	cfgDataSet.FOGLocs.Insert( new FOGInfo("Beach location 1", 2, "FOG_SoundSet_002", "10810 4 2266", "10825 4 2278", "6.2", "ZmbF_BlueCollarFat_Blue", 2,  ));  // need better default
+	cfgDataSet.FOGLocs.Insert( new FOGInfo("Beach location 1", 2, "FOG_SoundSet_002", "10810 4 2266", "10825 4 2278","0.0 0.0 0.0", "6.2", "ZmbF_BlueCollarFat_Blue", 2, 61 ));  // need better default
 	}
 
-
-
-    protected static void SaveCfg(string cfgName, FOG__Info cfgDataSet)
-    {
-        string Path =  m_CfgRoot + cfgName;
-
-	if (!FileExist(m_CfgRoot))
+	protected static void SaveCfg(string cfgName, FOG__Info cfgDataSet)
 	{
-	MakeDirectory(m_CfgRoot);
-        }
-
-        JsonFileLoader<FOG__Info>.JsonSaveFile(Path, cfgDataSet);
-    }
+	string Path =  m_CfgRoot + cfgName;
+		if (!FileExist(m_CfgRoot))
+		{
+		MakeDirectory(m_CfgRoot);
+		}
+	JsonFileLoader<FOG__Info>.JsonSaveFile(Path, cfgDataSet);
+	}
 
 
 
