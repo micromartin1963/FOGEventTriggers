@@ -4,6 +4,7 @@ Update the game file default file aswell
 TODO's
 Add cooldownperiod
 Add loads of sounds
+Add rotation of target object maybe
 
 
 work out probably from first digit of soundset number:
