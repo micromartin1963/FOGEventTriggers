@@ -42,6 +42,8 @@ class FOGTriggers
 			trigger.SetTargetVectorStr(config.FOGLocs.Get(i).TargetVectorStr);
 			trigger.SetFogSoundIndex(config.FOGLocs.Get(i).FogSoundIndex);
 			trigger.SetFogClassname(config.FOGLocs.Get(i).FogClassnameStr);
+			trigger.SetTargetRotation(config.FOGLocs.Get(i).TargetRot);
+			trigger.SetStandDownTime(config.FOGLocs.Get(i).StandDownTime);
 			trigger.SetLastTriggeredTime((GetGame().GetTime()/1000) );
 	    GetGame().CreateObject("FOGNPC_SurvivorM_Mirek", WhereIsIt );   // temp visual  marker ------------------------------
 	  }

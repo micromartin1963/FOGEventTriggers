@@ -6,9 +6,11 @@ class FOG_MYTrigger extends Trigger
 	protected  EffectSound m_fogtriggerSound;
 	protected string m_TriggerText;
 	protected string m_TriggerOrigVector;
+	protected string m_TriggerTargetRot;
 	protected string m_TriggerSnd;
         protected int m_type;
         protected int m_soundindex;
+        protected int m_standdowntime;
 	protected string m_FogClassname;
 	protected int m_LastTriggered; //----------------------------------------------------------
 	protected int m_LastTriggeredTime;
@@ -76,6 +78,20 @@ class FOG_MYTrigger extends Trigger
 		return m_type;
 	}
 
+
+
+	void SetStandDownTime(int time)
+	{
+		m_standdowntime = time;
+	}
+	
+	int GetStandDownTime()
+	{
+		return m_standdowntime;
+	}
+
+
+
 	string GetTargetVectorStr()
 	{
 	return m_TriggerTargetVector;
@@ -90,6 +106,19 @@ class FOG_MYTrigger extends Trigger
 	{
 	return m_TriggerOrigVector;
 	}
+
+
+	void SetTargetRotation(string r)
+	{
+	m_TriggerTargetRot = r;
+	}
+
+	string GetTargetRotation()
+	{
+	return m_TriggerTargetRot;
+	}
+
+
 
 	void SetTriggerOrigVector(string v)
 	{
@@ -124,7 +153,7 @@ class FOG_MYTrigger extends Trigger
 
 	bool CanWeTrigger(int time)   //------------- 60 needs to be a variable possibly not less that 60
 	{
-		if (time > m_LastTriggeredTime+60)
+		if (time > m_LastTriggeredTime + GetStandDownTime())
 		{
 			m_LastTriggered = time;
 			return true;
