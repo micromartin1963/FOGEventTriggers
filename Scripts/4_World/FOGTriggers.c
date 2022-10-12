@@ -55,14 +55,25 @@ class FOGTriggers
 	
                 PlayerBase player = PlayerBase.Cast(obj);
 		Param1<string> msgRp0 = new Param1<string>( textstr );
+		FogTriggerLogger.Log("In Zone");
 
 		if(TriggerType==2)
 		{
 		player.SetPosition(targetvectorstr.ToVector());	
 		}
+
 		if(TriggerType==3)
 		{
-		GetGame().CreateObject(classnamestr, targetvectorstr.ToVector() );
+			if(classnamestr.Contains("ZmbM")
+			{
+			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector(),false,true,true );
+			FogTriggerLogger.Log("spawned  AI " + classnamestr);
+			}
+			else
+			{
+			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector());
+			FogTriggerLogger.Log("spawned NON AI " + classnamestr);
+			}
 		}
 
 		if(TriggerType==4)
@@ -79,36 +90,85 @@ class FOGTriggers
 		if(TriggerType==6)
 		{
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
-		GetGame().CreateObject(classnamestr, targetvectorstr.ToVector() );
+			if(classnamestr.Contains("ZmbM")
+			{
+			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector(),false,true,true );
+			FogTriggerLogger.Log("spawned AI " + classnamestr);
+			}
+			else
+			{
+			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector());
+			FogTriggerLogger.Log("spawned NON AI " + classnamestr);
+			}
 		}
 
 		if(TriggerType==7)
 		{
 
-		}
-
-	
-
-
-
-
-
-	
+		}	
 	}
 
-	static void FogSteppedIntoAreaFromSync(string textstr)  
+
+	static void FogSteppedIntoAreaFromSync(string textstr)
+
+	//!!!!!!! soundset format suggest FOG_SoundSet_XYYNNN
+	// X = type (see below) , Y = seconds of loop , NNN sounset num
+	// 1 = play at trigger point (No loop)
+	// 2 = play at targetpos (No loop)
+	// 3 = play on person (No loop)
+	// 4 = play at trigger pos (loop for YY seconds)
+	// 5 = play at targetpos (loop for YY seconds)
+	// 6 = play on person (loop for YY seconds)
+
+	// 320003  eg FOG_SoundSet_320003 plays on person for 20 seconds
+	// 100001     FOG_SoundSet_100001 plays at trigger point once
+	// 100001     FOG_SoundSet_120001 plays at trigger point once because its type one so YY is ignored !
+
 	{
 	string snd = "" + textstr;
+	int TrType = GetTriggerType(snd);
+
 	PlayerBase player = GetGame().GetPlayer();
 		if(player)
 		{
 		vector where = player.GetPosition();
 		EffectSound m_fogtriggerSound2 = new EffectSound;
-		m_fogtriggerSound2 = SEffectManager.PlaySound( snd, where );
+			if(TrType==1) // play at trigger pos
+			{
+			m_fogtriggerSound2 = SEffectManager.PlaySound( snd, where ,0.0,0.0,false); // testing loop
+			}
+			if(TrType==2) // play at trigger pos
+			{
+			m_fogtriggerSound2 = SEffectManager.PlaySound( snd, where ,0.0,0.0,true); // testing loop
+			}
 		}
-		else
-		{
-		Print("Error in FogSteppedIntoAreaFromSync");
-		}
+
 	}
+
+
+
+
+	static int GetTriggerType(string txtIn) // get 13'th char convert to int
+	{
+	int result = 0;
+	string str = txtIn.Get(13);
+	result=str.ToInt();
+	return result;
+	}
+
+
+	static int GetTriggerSeconds(string txtIn)
+	{
+
+	}
+
+
+	static int GetTriggerNum(string txtIn)  // probably not needed
+	{
+
+	}
+
+
+
+
 }

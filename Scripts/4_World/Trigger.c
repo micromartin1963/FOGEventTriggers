@@ -1,4 +1,4 @@
-// 1 teleport , 2 spawn item , 3 sound only
+
 
 class FOG_MYTrigger extends Trigger
 {
@@ -7,14 +7,15 @@ class FOG_MYTrigger extends Trigger
 	protected string m_TriggerText;
 	protected string m_TriggerOrigVector;
 	protected string m_TriggerTargetRot;
-	protected string m_TriggerSnd;
+	protected int m_TriggerSnd;
         protected int m_type;
         protected int m_soundindex;
         protected int m_standdowntime;
 	protected string m_FogClassname;
-	protected int m_LastTriggered; //----------------------------------------------------------
-	protected int m_LastTriggeredTime;
+	protected int m_LastTriggered; 
+	protected int m_LastTriggeredTime ;  
 	protected string m_TriggerTargetVector;
+	protected int m_SoundLoopTime;
 	
 	void FOG_MYTrigger()
 	{
@@ -26,7 +27,7 @@ class FOG_MYTrigger extends Trigger
 		super.OnVariablesSynchronized();
 		if (m_fogtrigger>0)
 		{
-		DoStuff("FOG_SoundSet_" + m_fogtrigger.ToString());
+		DoStuff("FOG_SoundSet_"  + m_fogtrigger.ToString());
 		}
         }
 	
@@ -35,6 +36,9 @@ class FOG_MYTrigger extends Trigger
 	{
 	FOGTriggers.FogSteppedIntoAreaFromSync(sndstr);
 	}
+
+
+
 
 	void TriggerOnEnterEvent(int index)
 	{
@@ -62,11 +66,16 @@ class FOG_MYTrigger extends Trigger
 	{
 		m_soundindex = i;
 	}
-	
+
 	int GetFogSoundIndex()
 	{
 		return m_soundindex;
 	}
+
+
+	
+
+
 
 	void SetTriggerType(int t)
 	{
@@ -78,8 +87,6 @@ class FOG_MYTrigger extends Trigger
 		return m_type;
 	}
 
-
-
 	void SetStandDownTime(int time)
 	{
 		m_standdowntime = time;
@@ -89,8 +96,6 @@ class FOG_MYTrigger extends Trigger
 	{
 		return m_standdowntime;
 	}
-
-
 
 	string GetTargetVectorStr()
 	{
@@ -107,7 +112,6 @@ class FOG_MYTrigger extends Trigger
 	return m_TriggerOrigVector;
 	}
 
-
 	void SetTargetRotation(string r)
 	{
 	m_TriggerTargetRot = r;
@@ -117,8 +121,6 @@ class FOG_MYTrigger extends Trigger
 	{
 	return m_TriggerTargetRot;
 	}
-
-
 
 	void SetTriggerOrigVector(string v)
 	{
@@ -135,55 +137,64 @@ class FOG_MYTrigger extends Trigger
 		m_TriggerText = text;
 	}
 
-	string GetTriggerSnd()
+	int GetTriggerSnd()
 	{
 		return m_TriggerSnd;
 	}
 
-	void SetTriggerSnd(string text)
+	void SetTriggerSnd(int i)
 	{
-		m_TriggerSnd = text;
+		m_TriggerSnd = i;
 	}
 
-	void SetLastTriggeredTime(int time)
+	void SetLastTriggeredTime(int mytime)
 	{
-		m_LastTriggeredTime = time;
+		m_LastTriggeredTime = mytime;
 	}
 
-
-	bool CanWeTrigger(int time)   //------------- 60 needs to be a variable possibly not less that 60
+	int GetLastTriggeredTime()
 	{
-		if (time > m_LastTriggeredTime + GetStandDownTime())
+		return m_LastTriggeredTime;
+	}
+
+	bool CanWeTrigger(int mytime)  
+	{
+		if (mytime > m_LastTriggeredTime + GetStandDownTime())
 		{
-			m_LastTriggered = time;
-			return true;
+		m_LastTriggeredTime = mytime;
+		return true;
 		}			
 		return false;
 	}
 		
 	void OnEnter(Object obj)
-    {
-				
+	{				
 		if (obj.IsMan() && GetGame().IsServer())
 		{
-			if (CanWeTrigger(GetGame().GetTime()/1000))
+			if (PlayerBase.Cast(obj).GetIdentity())
 			{
-       			PlayerBase player = PlayerBase.Cast(obj);	
-			string vectorstr1 = GetTargetVectorStr();
-			string FClassname = GetFogClassname();
-			string txtstr =  GetTriggerText();
-			int TriggerType = GetTriggerType();
-			int sndIndex = GetFogSoundIndex();		
-			SetLastTriggeredTime(GetGame().GetTime()/1000);
-			TriggerOnEnterEvent(sndIndex);  
-			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );      
-			FOGTriggers.FogSteppedIntoArea(obj,txtstr,vectorstr1,FClassname,TriggerType);  
+				if (PlayerBase.Cast(obj).GetIdentity().GetName())
+				{
+					if (CanWeTrigger(GetGame().GetTime()/1000))
+					{
+					PlayerBase player = PlayerBase.Cast(obj);	
+					string vectorstr1 = GetTargetVectorStr();
+					string FClassname = GetFogClassname();
+					string txtstr =  GetTriggerText();
+					int TriggerType = GetTriggerType();
+					int sndIndex = GetFogSoundIndex(); 	
+					SetLastTriggeredTime(GetGame().GetTime()/1000);
+					TriggerOnEnterEvent(sndIndex);  
+					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );   // 1000 should be GetStandDownTime ??   
+					FOGTriggers.FogSteppedIntoArea(obj,txtstr,vectorstr1,FClassname,TriggerType); 
+					}
+				}
 			}
 		}					
-    }
+	}
 
-    void OnLeave(Object obj)
-    {    
-    }
+	void OnLeave(Object obj)
+	{    
+	}
 
 };
