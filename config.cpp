@@ -4,7 +4,7 @@ class CfgPatches
 {
 	class FOGTriggers
 	{
-		units[] = {"FOGNPC_SurvivorM_Mirek"};
+		units[] = {"FOGSign_Marker"};
 		weapons[] = {};
 		requiredVersion = 0.1;
 		requiredAddons[] = {"DZ_Data","DZ_Sounds_Effects","DZ_Scripts","DZ_Characters","JM_CF_Scripts"};
@@ -48,27 +48,18 @@ class CfgMods
 };
 class CfgVehicles
 {
-	class SurvivorBase;
-
-        class SurvivorF_Irena;
-	class FOGNPCBase: SurvivorF_Irena
-	{
-		scope = 0;
-
-	};
 
 
-	class FOGNPC_SurvivorM_Mirek: FOGNPCBase
+	class House;
+	class HouseNoDestruct;
+
+	class FOGSign_Marker : HouseNoDestruct
 	{
 		scope = 2;
-
+		model = "\FOG\FOGTriggers\models\sign_marker.p3d";
 	};
 
-
 };
-
-
-
 
 class CfgSoundShaders
 {
@@ -76,14 +67,28 @@ class CfgSoundShaders
 
 	class FOG_SoundShader1: baseCharacter_SoundShader
 	{
-		samples[] = {{"FOG\FOGTriggers\sounds\attack_1",1}};
+		samples[] = {{"FOG\FOGTriggers\sounds\teleport",1}};
 		volume = 1;
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
 	};
 	class FOG_SoundShader2: baseCharacter_SoundShader
 	{
-		samples[] = {{"FOG\FOGTriggers\sounds\attack_111",1}};
+		samples[] = {{"FOG\FOGTriggers\sounds\attack_1",1}};
+		volume = 1;
+		range = 60;
+		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
+	};
+	class FOG_SoundShader3: baseCharacter_SoundShader
+	{
+		samples[] = {{"FOG\FOGTriggers\sounds\gregorian_chant",1}};
+		volume = 1;
+		range = 60;
+		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
+	};
+	class FOG_SoundShader4: baseCharacter_SoundShader
+	{
+		samples[] = {{"FOG\FOGTriggers\sounds\whisper",1}};
 		volume = 1;
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
@@ -92,17 +97,25 @@ class CfgSoundShaders
 };
 
 
-
 class CfgSoundSets
 {
 	//class baseCharacter_SoundSet;
-	class FOG_SoundSet_1
+	class FOG_SoundSet_300001			//teleport
 	{
 		soundShaders[] = {"FOG_SoundShader1"};
 	};
-	class FOG_SoundSet_2
+	class FOG_SoundSet_100001			//Zombie snort short
 	{
 		soundShaders[] = {"FOG_SoundShader2"};
 	};
+	class FOG_SoundSet_100002			//gregorian chant
+	{
+		soundShaders[] = {"FOG_SoundShader3"};
+	};
+	class FOG_SoundSet_630002			//30 secs of whisper
+	{
+		soundShaders[] = {"FOG_SoundShader4"};
+	};
+
 };
 

@@ -7,12 +7,13 @@ class FOG_MYTrigger extends Trigger
 	protected string m_TriggerText;
 	protected string m_TriggerOrigVector;
 	protected string m_TriggerTargetRot;
-	protected int m_TriggerSnd;
+	//protected int m_TriggerSnd;
         protected int m_type;
         protected int m_soundindex;
         protected int m_standdowntime;
 	protected string m_FogClassname;
 	protected int m_LastTriggered; 
+	protected int m_ShowMarker
 	protected int m_LastTriggeredTime ;  
 	protected string m_TriggerTargetVector;
 	protected int m_SoundLoopTime;
@@ -71,10 +72,6 @@ class FOG_MYTrigger extends Trigger
 	{
 		return m_soundindex;
 	}
-
-
-	
-
 
 
 	void SetTriggerType(int t)
@@ -137,15 +134,26 @@ class FOG_MYTrigger extends Trigger
 		m_TriggerText = text;
 	}
 
-	int GetTriggerSnd()
+	int GetShowMarker()
 	{
-		return m_TriggerSnd;
+		return m_ShowMarker;
 	}
 
-	void SetTriggerSnd(int i)
+	void SetShowMarker(int i)
 	{
-		m_TriggerSnd = i;
+		m_ShowMarker = i;
 	}
+
+
+	//int GetTriggerSnd()
+	//{
+	//	return m_TriggerSnd;
+	//}
+
+	//void SetTriggerSnd(int i)
+	//{
+	//	m_TriggerSnd = i;
+	//}
 
 	void SetLastTriggeredTime(int mytime)
 	{

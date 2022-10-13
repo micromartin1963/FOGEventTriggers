@@ -1,0 +1,81 @@
+Summary of the 2 main methods called when triggered.
+
+----------------------------------------
+FogSteppedIntoArea()
+This is for everything else other than sound.
+Variables can be passed to this
+
+ 
+type 2 - teleport , 3 - spawn object , 4 -  message / sound only , 5 - teleport + message , 6 - spawn + message
+
+
+
+eg	"TType": 2,  in FOGTRiggersConfig.json  is teleport
+
+	"LocationName" : "Beach location 1",			just for reference
+	"TType": 2,						what happens (teleport)
+        "FogText": "",						string to show if TType is  4 or 6
+	"OrigVectorStr":	"9619 7 1816",			where  the trigger point is
+	"TargetVectorStr": "9634 6 1813",			where to spawn item in classname or where to teleport to 
+	"TargetRot" : "",					not used yet
+        "FogRadius" : "10.2",					how far away from trigger point we can trigger
+        "FogClassnameStr" : "",					classname of object to spawn eg ZmbM_FOGPseudoGiant
+	"FogSoundIndex" : 100001,				explained below
+	"StandDownTime" : 60,					how long till next trigger possible (cooldown)
+	"ShowMarker" : 1					shows marker at trigger point for testing purposes
+
+eg	"TType": 3, spawn object
+
+	"LocationName" : "Beach location 2",
+	"TType": 3,						spawn object
+        "FogText": "",
+	"OrigVectorStr":	"9661 7 1806",
+	"TargetVectorStr": "9679 5 1809",			to here
+	"TargetRot" : " 0.0 0.0 0.0",
+        "FogRadius" : "10.2",
+        "FogClassnameStr" : "ZmbM_FOGPseudoGiant",		what to spawn
+	"FogSoundIndex" : 100001,				didn't really need to do sound but did one anyway as an alarm
+	"StandDownTime" : 10,
+	"ShowMarker" : 1
+
+eg	"TType": 4, message (but if you leave "FogText" param "" you can do sound only)
+
+	"LocationName" : "Church Location 1",
+	"TType": 4,
+        "FogText": "Church Location 1",				Didn't really need message leave blank if sound only wanted
+	"OrigVectorStr":	"6477.18 8.66 2366.69",
+	"TargetVectorStr": "",
+	"TargetRot" : "",
+        "FogRadius" : "10.2",
+        "FogClassnameStr" : "",
+	"FogSoundIndex" : 300002,
+	"StandDownTime" : 30,
+	"ShowMarker" : 1
+        },
+
+--------------------------------------------
+FogSteppedIntoAreaFromSync()
+This seems to be the only way to get sound to play !
+This is triggered when m_fogtrigger changes
+Trouble is that you cannot seem to pass variables to anything so
+the way the sound is played or looped is in the soundset name and split up to
+get it to do what you want .
+But in retrospect this is probably more efficient than any other method. (less variables being passed)
+
+	//!!!!!!! soundset format  FOG_SoundSet_XYYNNN
+	// X = type (see below) , Y = seconds of loop , NNN sounset num
+	// 1 = play at trigger point (No loop)
+
+	// 3 = play on person (No loop)
+	// 4 = play at trigger pos (loop for YY seconds)
+
+	// 6 = play on person (loop for YY seconds)
+
+	// 320003  eg FOG_SoundSet_620003 plays on person for 20 seconds 
+	// 100001     FOG_SoundSet_100001 plays at trigger point once
+	// 160001     FOG_SoundSet_120001 will not play at trigger point once because its type one ,so YY is ignored ! it should be 420001
+
+	so when creating soundsets take into account if you want a looping sound or not or create both !
+--------------------------------------------
+
+

@@ -10,9 +10,9 @@ class FOGInfo
     string FogClassnameStr;
     int FogSoundIndex;
     int StandDownTime;
-    int SoundLoopTime;
+    int ShowMarker;
  
-    void FOGInfo(string loc,int Type,string nam,string v,string v2,string rot,string rad,string cn,int index,int s,int slt) 
+    void FOGInfo(string loc,int Type,string nam,string v,string v2,string rot,string rad,string cn,int index,int s,int show) 
 	{
 	LocationName = loc;
 	TType = Type;
@@ -24,7 +24,7 @@ class FOGInfo
 	FogClassnameStr = cn;
 	FogSoundIndex = index;
 	StandDownTime = s;
-	SoundLoopTime = slt;
+	ShowMarker = show;
 	}
 }
 
@@ -62,7 +62,7 @@ class FOGTriggerConfig
 	protected static void MyConfig(out FOG__Info cfgDataSet)
 	{
         cfgDataSet = new FOG__Info();
-	cfgDataSet.FOGLocs.Insert( new FOGInfo("Beach location 1", 2, "FOG_SoundSet_002", "10810 4 2266", "10825 4 2278","0.0 0.0 0.0", "6.2", "ZmbF_BlueCollarFat_Blue", 2, 61 , 0 ));  // need better default
+	cfgDataSet.FOGLocs.Insert( new FOGInfo("Beach location 1", 2, "FOG_SoundSet_002", "10810 4 2266", "10825 4 2278","0.0 0.0 0.0", "6.2", "ZmbF_BlueCollarFat_Blue", 2, 61 ,1 ));  // need better default
 	}
 
 	protected static void SaveCfg(string cfgName, FOG__Info cfgDataSet)
