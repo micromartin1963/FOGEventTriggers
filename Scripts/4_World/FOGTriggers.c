@@ -68,7 +68,7 @@ class FOGTriggers
 
 		if(TriggerType==3)
 		{
-			if(classnamestr.Contains("ZmbM") || classnamestr.Contains("FOGPseudoGiant") )
+			if(classnamestr.Contains("ZmbM"))
 			{
 			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector(),false,true,true );
 			FogTriggerLogger.Log("spawned  AI " + classnamestr);
@@ -94,7 +94,7 @@ class FOGTriggers
 		if(TriggerType==6)
 		{
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
-			if(classnamestr.Contains("ZmbM") || classnamestr.Contains("FOGPseudoGiant") )
+			if(classnamestr.Contains("ZmbM") )
 			{
 			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector(),false,true,true );
 			FogTriggerLogger.Log("spawned AI " + classnamestr);
