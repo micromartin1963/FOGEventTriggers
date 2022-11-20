@@ -12,9 +12,9 @@ class CfgPatches
 };
 class CfgMods
 {
-	class FOG_NPC
+	class FOGTriggers
 	{
-		dir = "FOG";
+		dir = "FOGTriggers";
 		picture = "";
 		action = "";
 		hideName = 0;
@@ -31,17 +31,17 @@ class CfgMods
 			class gameScriptModule
 			{
 				value = "";
-				files[] = {"FOG/FOGTriggers/scripts/3_Game"};
+				files[] = {"FOGTriggers/scripts/3_Game"};
 			};
 			class worldScriptModule
 			{
 				value = "";
-				files[] = {"FOG/FOGTriggers/Scripts/4_World"};
+				files[] = {"FOGTriggers/Scripts/4_World"};
 			};
 			class missionScriptModule
 			{
 				value = "";
-				files[] = {"FOG/FOGTriggers/Scripts/5_Mission"};
+				files[] = {"FOGTriggers/Scripts/5_Mission"};
 			};
 		};
 	};
@@ -56,7 +56,7 @@ class CfgVehicles
 	class FOGSign_Marker : HouseNoDestruct
 	{
 		scope = 2;
-		model = "\FOG\FOGTriggers\models\sign_marker.p3d";
+		model = "\FOGTriggers\models\sign_marker.p3d";
 	};
 
 };
@@ -67,28 +67,35 @@ class CfgSoundShaders
 
 	class FOG_SoundShader1: baseCharacter_SoundShader
 	{
-		samples[] = {{"FOG\FOGTriggers\sounds\teleport",1}};
+		samples[] = {{"\FOGTriggers\sounds\teleport",1}};
+		volume = 1;
+		range = 60;
+		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
+	};
+	class FOG_SoundShader5: baseCharacter_SoundShader
+	{
+		samples[] = {{"\FOGTriggers\sounds\teleport",1}};
 		volume = 1;
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
 	};
 	class FOG_SoundShader2: baseCharacter_SoundShader
 	{
-		samples[] = {{"FOG\FOGTriggers\sounds\attack_1",1}};
+		samples[] = {{"\FOGTriggers\sounds\attack_1",1}};
 		volume = 1;
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
 	};
 	class FOG_SoundShader3: baseCharacter_SoundShader
 	{
-		samples[] = {{"FOG\FOGTriggers\sounds\gregorian_chant",1}};
+		samples[] = {{"\FOGTriggers\sounds\gregorian_chant",1}};
 		volume = 1;
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
 	};
 	class FOG_SoundShader4: baseCharacter_SoundShader
 	{
-		samples[] = {{"FOG\FOGTriggers\sounds\whisper",1}};
+		samples[] = {{"\FOGTriggers\sounds\whisper",1}};
 		volume = 1;
 		range = 60;
 		rangeCurve[] = {{0,1},{0.5,0.7},{1,0}};
@@ -103,6 +110,10 @@ class CfgSoundSets
 	class FOG_SoundSet_300001			//teleport
 	{
 		soundShaders[] = {"FOG_SoundShader1"};
+	};
+	class FOG_SoundSet_200001			//teleport at target try
+	{
+		soundShaders[] = {"FOG_SoundShader5"};
 	};
 	class FOG_SoundSet_100001			//Zombie snort short
 	{
