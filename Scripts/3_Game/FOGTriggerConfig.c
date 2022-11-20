@@ -62,7 +62,7 @@ class FOGTriggerConfig
 	protected static void MyConfig(out FOG__Info cfgDataSet)
 	{
         cfgDataSet = new FOG__Info();
-	cfgDataSet.FOGLocs.Insert( new FOGInfo("Beach location 1", 2, "FOG_SoundSet_002", "10810 4 2266", "10825 4 2278","0.0 0.0 0.0", "6.2", "ZmbF_BlueCollarFat_Blue", 2, 61 ,1 ));  // need better default
+	cfgDataSet.FOGLocs.Insert( new FOGInfo("Beach location 1", 2, "FOG_SoundSet_002", "10810 5.6 2266", "10825 6 2278","0.0 0.0 0.0", "6.2", "ZmbF_BlueCollarFat_Blue", 300001, 61 ,1 ));  // need better default
 	}
 
 	protected static void SaveCfg(string cfgName, FOG__Info cfgDataSet)

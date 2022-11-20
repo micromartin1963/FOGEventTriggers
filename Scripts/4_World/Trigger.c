@@ -2,8 +2,8 @@
 
 class FOG_MYTrigger extends Trigger
 {
-	protected int m_fogtrigger;
-	protected  EffectSound m_fogtriggerSound;
+	protected int m_FOGtrigger;
+	protected  EffectSound m_FOGtriggerSound;
 	protected string m_TriggerText;
 	protected string m_TriggerOrigVector;
 	protected string m_TriggerTargetRot;
@@ -11,7 +11,7 @@ class FOG_MYTrigger extends Trigger
         protected int m_type;
         protected int m_soundindex;
         protected int m_standdowntime;
-	protected string m_FogClassname;
+	protected string m_FOGClassname;
 	protected int m_LastTriggered; 
 	protected int m_ShowMarker
 	protected int m_LastTriggeredTime ;  
@@ -20,22 +20,22 @@ class FOG_MYTrigger extends Trigger
 	
 	void FOG_MYTrigger()
 	{
-		RegisterNetSyncVariableInt("m_fogtrigger");
+		RegisterNetSyncVariableInt("m_FOGtrigger");
 	}
 			
 	override void OnVariablesSynchronized()
 	{
 		super.OnVariablesSynchronized();
-		if (m_fogtrigger>0)
+		if (m_FOGtrigger>0)
 		{
-		DoStuff("FOG_SoundSet_"  + m_fogtrigger.ToString());
+		DoStuff("FOG_SoundSet_"  + m_FOGtrigger.ToString());
 		}
         }
 	
 
 	void DoStuff(string sndstr)
 	{
-	FOGTriggers.FogSteppedIntoAreaFromSync(sndstr);
+	FOGTriggers.FOGSteppedIntoAreaFromSync(sndstr);
 	}
 
 
@@ -43,32 +43,32 @@ class FOG_MYTrigger extends Trigger
 
 	void TriggerOnEnterEvent(int index)
 	{
-		m_fogtrigger = index;
+		m_FOGtrigger = index;
 		SetSynchDirty();
 	}
 	
 	void ResetEvent()
 	{
-		m_fogtrigger = 0;
+		m_FOGtrigger = 0;
 		SetSynchDirty();
 	}
 
-	void SetFogClassname(string Cn)
+	void SetFOGClassname(string Cn)
 	{
-		m_FogClassname = Cn;
+		m_FOGClassname = Cn;
 	}
 	
-	string GetFogClassname()
+	string GetFOGClassname()
 	{
-		return m_FogClassname;
+		return m_FOGClassname;
 	}
 	
-	void SetFogSoundIndex(int i)
+	void SetFOGSoundIndex(int i)
 	{
 		m_soundindex = i;
 	}
 
-	int GetFogSoundIndex()
+	int GetFOGSoundIndex()
 	{
 		return m_soundindex;
 	}
@@ -187,14 +187,15 @@ class FOG_MYTrigger extends Trigger
 					{
 					PlayerBase player = PlayerBase.Cast(obj);	
 					string vectorstr1 = GetTargetVectorStr();
-					string FClassname = GetFogClassname();
+					string FClassname = GetFOGClassname();
 					string txtstr =  GetTriggerText();
 					int TriggerType = GetTriggerType();
-					int sndIndex = GetFogSoundIndex(); 	
+					int sndIndex = GetFOGSoundIndex(); 	
 					SetLastTriggeredTime(GetGame().GetTime()/1000);
+					FOGTriggers.FOGSteppedIntoArea(obj,txtstr,vectorstr1,FClassname,TriggerType); 
 					TriggerOnEnterEvent(sndIndex);  
 					GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater( ResetEvent, 1000, false );   // 1000 should be GetStandDownTime ??   
-					FOGTriggers.FogSteppedIntoArea(obj,txtstr,vectorstr1,FClassname,TriggerType); 
+					//FOGTriggers.FOGSteppedIntoArea(obj,txtstr,vectorstr1,FClassname,TriggerType);   -------------------moved to see if longer teleport works
 					}
 				}
 			}

@@ -1,13 +1,13 @@
-class FogTriggerLogger {
+class FOGTriggerLogger {
 	
-	void FogTriggerLogger() {}
+	void FOGTriggerLogger() {}
 	static void Log(string txt) {
-		string file_path = "$profile:\\FOGTriggers\\FogTriggerLog.log";
-		FileHandle foglogFile = OpenFile(file_path, FileMode.APPEND);
-		if (foglogFile != 0)
+		string file_path = "$profile:\\FOGTriggers\\FOGTriggerLog.log";
+		FileHandle FOGlogFile = OpenFile(file_path, FileMode.APPEND);
+		if (FOGlogFile != 0)
 		{
-		FPrintln(foglogFile, GetDate() + " [FOGLOG] " + txt);
-		CloseFile(foglogFile);
+		FPrintln(FOGlogFile, GetDate() + " [FOGLOG] " + txt);
+		CloseFile(FOGlogFile);
 		}
 	}
 	

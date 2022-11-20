@@ -1,6 +1,7 @@
 class FOGTriggers
 {
 	protected static ref FOGTriggers Instance;
+	protected static string m_temp_vector;
 
 	static FOGTriggers GetInstance()
 	{
@@ -40,8 +41,8 @@ class FOGTriggers
 			trigger.SetTriggerText(config.FOGLocs.Get(i).FogText);
   			trigger.SetTriggerOrigVector(config.FOGLocs.Get(i).OrigVectorStr);
 			trigger.SetTargetVectorStr(config.FOGLocs.Get(i).TargetVectorStr);
-			trigger.SetFogSoundIndex(config.FOGLocs.Get(i).FogSoundIndex);
-			trigger.SetFogClassname(config.FOGLocs.Get(i).FogClassnameStr);
+			trigger.SetFOGSoundIndex(config.FOGLocs.Get(i).FogSoundIndex);
+			trigger.SetFOGClassname(config.FOGLocs.Get(i).FogClassnameStr);
 			trigger.SetTargetRotation(config.FOGLocs.Get(i).TargetRot);
 			trigger.SetStandDownTime(config.FOGLocs.Get(i).StandDownTime);
 			trigger.SetShowMarker(config.FOGLocs.Get(i).ShowMarker);
@@ -53,13 +54,15 @@ class FOGTriggers
 	  }
        }
 	
-	static void FogSteppedIntoArea(Object obj, string textstr,string targetvectorstr,string classnamestr,int TriggerType)
+	static void FOGSteppedIntoArea(Object obj, string textstr,string targetvectorstr,string classnamestr,int TriggerType)
 	{
 		//type 2 - teleport , 3 - spawn object , 4 -  message , 5 - teleport + message , 6 - spawn + message
 
                 PlayerBase player = PlayerBase.Cast(obj);
 		Param1<string> msgRp0 = new Param1<string>( textstr );
-		FogTriggerLogger.Log("In Zone");
+		FOGTriggerLogger.Log("In Zone");
+
+		m_temp_vector = targetvectorstr;
 
 		if(TriggerType==2)
 		{
@@ -68,15 +71,15 @@ class FOGTriggers
 
 		if(TriggerType==3)
 		{
-			if(classnamestr.Contains("ZmbM"))
+			if(classnamestr.Contains("ZmbM") || classnamestr.Contains("ZmbF")  )
 			{
 			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector(),false,true,true );
-			FogTriggerLogger.Log("spawned  AI " + classnamestr);
+			FOGTriggerLogger.Log("spawned  AI " + classnamestr);
 			}
 			else
 			{
 			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector());
-			FogTriggerLogger.Log("spawned NON AI " + classnamestr);
+			FOGTriggerLogger.Log("spawned NON AI " + classnamestr);
 			}
 		}
 
@@ -94,26 +97,28 @@ class FOGTriggers
 		if(TriggerType==6)
 		{
 		GetGame().RPCSingleParam(player, ERPCs.RPC_USER_ACTION_MESSAGE, msgRp0, true, player.GetIdentity());
-			if(classnamestr.Contains("ZmbM") )
+			if(classnamestr.Contains("ZmbM") || classnamestr.Contains("ZmbF") )
 			{
 			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector(),false,true,true );
-			FogTriggerLogger.Log("spawned AI " + classnamestr);
+			FOGTriggerLogger.Log("spawned AI " + classnamestr);
 			}
 			else
 			{
 			GetGame().CreateObject(classnamestr, targetvectorstr.ToVector());
-			FogTriggerLogger.Log("spawned NON AI " + classnamestr);
+			FOGTriggerLogger.Log("spawned NON AI " + classnamestr);
 			}
 		}	
 	}
 
 
-	static void FogSteppedIntoAreaFromSync(string textstr)
+	static void FOGSteppedIntoAreaFromSync(string textstr)
+
+
 
 	//!!!!!!! soundset format suggest FOG_SoundSet_XYYNNN
 	// X = type (see below) , Y = seconds of loop , NNN sounset num
 	// 1 = play at trigger point (No loop)
-
+	// 2 = play at target (no loop) NOT WORKING
 	// 3 = play on person (No loop)
 	// 4 = play at trigger pos (loop for YY seconds)
 
@@ -124,6 +129,7 @@ class FOGTriggers
 	// 160001     FOG_SoundSet_120001 will not play at trigger point once because its type one ,so YY is ignored ! it should be 420001
 
 	{
+	static vector v = m_temp_vector.ToVector();
 	string snd = "" + textstr;
 	int TrType = GetTriggerType(snd);
 	int TrLoopTime = GetTriggerSeconds(snd);
@@ -133,30 +139,36 @@ class FOGTriggers
 		{
 		vector whereamI = player.GetPosition();
 
-		EffectSound m_fogtriggerSound2 = new EffectSound;
+		EffectSound m_FOGtriggerSound2 = new EffectSound;
 			if(TrType==1) // play at trigger pos
 			{
-			m_fogtriggerSound2 = SEffectManager.PlaySound( snd, whereamI ,0.0,0.0,false); // testing loop
+			m_FOGtriggerSound2 = SEffectManager.PlaySound( snd, whereamI ,0.0,0.0,false);
 			}
+
+			if(TrType==2) // play at target pos TRYING
+			{
+			m_FOGtriggerSound2 = SEffectManager.PlaySound( snd, v ,0.0,0.0,false); 
+			}
+
 
 			if(TrType==3) // play on person
 			{
-			m_fogtriggerSound2 = SEffectManager.PlaySoundOnObject( snd, player );  // testing on person to be moved
-			m_fogtriggerSound2.SetSoundAutodestroy(true);
+			m_FOGtriggerSound2 = SEffectManager.PlaySoundOnObject( snd, player );  // testing on person to be moved
+			m_FOGtriggerSound2.SetSoundAutodestroy(true);
 			}
 
 			if(TrType==4) // play triggerpos   and loop
 			{
-			m_fogtriggerSound2 = SEffectManager.PlaySound( snd, whereamI ,0.0,0.0,true); // testing loop
-			m_fogtriggerSound2.SetSoundAutodestroy(true);
-			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(ResetSound,(TrLoopTime*1000) ,false, m_fogtriggerSound2);
+			m_FOGtriggerSound2 = SEffectManager.PlaySound( snd, whereamI ,0.0,0.0,true); // testing loop
+			m_FOGtriggerSound2.SetSoundAutodestroy(true);
+			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(ResetSound,(TrLoopTime*1000) ,false, m_FOGtriggerSound2);
 			}
 
 			if(TrType==6) // play on person and loop
 			{
-			m_fogtriggerSound2 = SEffectManager.PlaySoundOnObject( snd, player, 0.0 ,0.0,true );  // testing on person to be moved
-			m_fogtriggerSound2.SetSoundAutodestroy(true);
-			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(ResetSound,(TrLoopTime*1000) ,false, m_fogtriggerSound2);
+			m_FOGtriggerSound2 = SEffectManager.PlaySoundOnObject( snd, player, 0.0 ,0.0,true );  // testing on person to be moved
+			m_FOGtriggerSound2.SetSoundAutodestroy(true);
+			GetGame().GetCallQueue( CALL_CATEGORY_SYSTEM ).CallLater(ResetSound,(TrLoopTime*1000) ,false, m_FOGtriggerSound2);
 			}
 		}
 	}
