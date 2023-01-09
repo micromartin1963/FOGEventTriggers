@@ -1,0 +1,57 @@
+{
+
+    "FOGLocs": [
+        {
+	"LocationName" : "Beach location 1",
+	"TType": 2,
+        "FogText": "",
+	"OrigVectorStr":	"9619 7 1816",
+	"TargetVectorStr": "9634 6 1813",
+	"TargetRot" : "",
+        "FogRadius" : "10.2",
+        "FogClassnameStr" : "",
+	"FogSoundIndex" : 300001,
+	"StandDownTime" : 60,
+	"ShowMarker" : 1
+        }, 
+       {
+	"LocationName" : "Beach location 2",
+	"TType": 3,
+        "FogText": "",
+	"OrigVectorStr":	"9661 7 1806",
+	"TargetVectorStr": "9679 5 1809",
+	"TargetRot" : " 0.0 0.0 0.0",
+        "FogRadius" : "10.2",
+        "FogClassnameStr" : "PseudoGiant",
+	"FogSoundIndex" : 100001,
+	"StandDownTime" : 10,
+	"ShowMarker" : 1
+        },
+       {
+	"LocationName" : "Church Location 1",
+	"TType": 4,
+        "FogText": "Church Location 1",
+	"OrigVectorStr":	"6477.18 8.66 2366.69",
+	"TargetVectorStr": "",
+	"TargetRot" : "",
+        "FogRadius" : "10.2",
+        "FogClassnameStr" : "",
+	"FogSoundIndex" : 100002,
+	"StandDownTime" : 30,
+	"ShowMarker" : 1
+        },
+        {
+	"LocationName" : "Beach location 3",
+	"TType": 4,
+        "FogText": "Beach location 3",
+	"OrigVectorStr":	"9706 5 1805",
+	"TargetVectorStr": "9723 5 1806",
+	"TargetRot" : "",
+        "FogRadius" : "10.2",
+        "FogClassnameStr" : "",
+	"FogSoundIndex" : 630002,
+	"StandDownTime" : 60,
+	"ShowMarker" : 1 
+        }
+    ]
+}
