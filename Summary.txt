@@ -8,6 +8,7 @@ Variables can be passed to this
  
 type 2 - teleport , 3 - spawn object , 4 -  message / sound only , 5 - teleport + message , 6 - spawn + message
 
+PLEASE NOTE DO NOT LEAVE VARIABLE EMPTY - ALWAYS USE "" OR 0 as appropriate
 
 
 eg	"TType": 2,  in FOGTRiggersConfig.json  is teleport
