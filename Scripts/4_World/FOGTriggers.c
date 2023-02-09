@@ -31,11 +31,11 @@ class FOGTriggers
 
 			if (radius == 0)
 			{
-			trigger.SetCollisionCylinder(10, 5.9);   // Just set a default 
+			trigger.SetCollisionCylinder(10, 1.5);   // Just set a default 
 			}
 			else
 			{
-			trigger.SetCollisionCylinder(radius, 5.9);
+			trigger.SetCollisionCylinder(radius, 1.5);
 			}  
 			trigger.SetTriggerType(config.FOGLocs.Get(i).TType);
 			trigger.SetTriggerText(config.FOGLocs.Get(i).FogText);
